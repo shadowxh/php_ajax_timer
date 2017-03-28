@@ -4,7 +4,7 @@
 	class Racer{
 			public $driver_reg;
 			public $car_no;
-			public $name;
+			public $_name;
 			public $team;
 			public $best_time;
 			public $best_time_ddd;
@@ -14,23 +14,24 @@
 			public $total_time;
 			public $total_time_ddd;
 			function __construct($driver_reg_,$car_no_,$name_,$team_,$best_time_,$best_time_ddd_,$last_time_,$last_time_ddd_,$laps_,$total_time_,$total_time_ddd_){
-	                	$driver_reg=$driver_reg_;
-                        	$car_no=$car_no_;
-				$name=$name_;
-                        	$team=$team_;
-                        	$best_time=$best_time_;
-                        	$best_time_ddd=$best_time_ddd_;
-                        	$last_time=$last_time_;
-                        	$last_time_ddd=$last_time_ddd_;
-                        	$laps=$laps_;
-                        	$total_time=$total_time_;
-                        	$total_time_ddd=$total_time_ddd_;
+	                	$this->driver_reg=$driver_reg_;
+                        	$this->car_no=$car_no_;
+				$this->_name=$name_;
+                        	$this->team=$team_;
+                        	$this->best_time=$best_time_;
+                        	$this->best_time_ddd=$best_time_ddd_;
+                        	$this->last_time=$last_time_;
+                        	$this->last_time_ddd=$last_time_ddd_;
+                        	$this->laps=$laps_;
+                        	$this->total_time=$total_time_;
+                        	$this->total_time_ddd=$total_time_ddd_;
 		}
 	}
 	function get_data_from($database_name,$datatable_name)
 	{
 		$con=mysql_connect("localhost:3306","root","") or die ('Not connected:'.mysql_error());
         	mysql_select_db($database_name,$con);
+		mysql_query('set names utf8');
         	$now_info=mysql_query("SELECT * FROM ".$datatable_name);
         	while($row=mysql_fetch_array($now_info)) $Data[]=$row;
         	mysql_close($con);
@@ -46,8 +47,103 @@
 	{
 		$tmp1=($a->total_time).($a->total_time_ddd);
 		$tmp2=($b->total_time).($b->total_time_ddd);
-		return $tmp1<$tmp2?1:-1;
+		return $tmp1>$tmp2?1:-1;
 	}
+	
+	function add_race($one_race)
+	{
+		return '
+		<div class="row-fluid">
+                        <!-- 基本信息表 -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header">
+                                <div class="muted pull-left">'.substr($one_race[7],0,4).'年度 - '.$one_race[0].' - '.$one_race[1].' - '.$one_race[2].'</div>
+                            </div>
+                            <div class="block-content collapse in">
+                                <div class="span12">
+  									<table class="table">
+						              <thead>
+						                <tr>
+						                  <th>赛事名称</th>
+						                  <th>分项赛名称</th>
+						                  <th>场次</th>
+						                  <th>赛车场名称</th>
+						                  <th>赛道长度</th>
+						                  <th>赛事类别</th>
+						                  <th>赛事模式</th>
+						                  <th>开始日期</th>
+						                  <th>开始时间</th>
+						                </tr>
+						              </thead>
+						              <tbody>
+						                <tr>
+						                  <td>'.$one_race[0].'</td>
+						                  <td>'.$one_race[1].'</td>
+						                  <td>'.$one_race[2].'</td>
+						                  <td>'.$one_race[3].'</td>
+						                  <td>'.$one_race[4].'</td>
+						                  <td>'.$one_race[5].'</td>
+						                  <td>'.$one_race[6].'</td>
+						                  <td>'.$one_race[7].'</td>
+						                  <td>'.$one_race[8].'</td>
+						                </tr>
+						              </tbody>
+						            </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /block -->
+                    </div>
+		';
+
+	}
+	function add_man($racers)
+	{
+		$ret='
+			<div class="row-fluid">
+                        <!-- 成绩 -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header">
+                                <div class="muted pull-left">比赛成绩排名</div>
+                            </div>
+                            <div class="block-content collapse in">
+                                <div class="span12">
+  									<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+										<thead>
+											<tr>
+												<th>排名</th>
+												<th>车号</th>
+												<th>车手</th>
+												<th>车队</th>
+                                                <th>最快单圈</th>
+                                                <th>当前圈速</th>
+                                                <th>总圈数</th>
+												<th>总时间</th>
+												<th>差距</th>
+											</tr>
+										</thead>
+										<tbody>';
+		for($i=0;$i<count($racers);$i++)
+		{
+			$ret.='<tr class="'.($i%2==0?"odd":"even").'">
+				<td>'.($i+1).'</td>
+				<td>'.$racers[$i]->car_no.'</td>
+				<td>'.$racers[$i]->_name.'</td>
+				<td class="center">'.$racers[$i]->team.'</td>
+				<td class="center">'.$racers[$i]->best_time.'.'.$racers[$i]->best_time_ddd.'</td>
+                                <td class="center">'.$racers[$i]->last_time.'.'.$racers[$i]->last_time_ddd.'</td>
+                                <td class="center">'.$racers[$i]->laps.'</td>
+                                <td class="center">'.$racers[$i]->total_time.'.'.$racers[$i]->total_time_ddd.'</td>
+				<td class="center">'.($i==0?"":"difference").'</td>
+				</tr>';
+		}								
+		$ret.='</tbody></table></div></div></div>
+                        <!-- /block -->
+                    </div>';
+		
+		return $ret;
+	}
+
 	if(!empty($_GET))
 	{
 		$response="";
@@ -82,10 +178,12 @@
 		}
 		foreach($race_ids_unique as $key=>$val)
 		{
+			$response.=add_race($all_races[$key]);
 			usort($race_ids_unique[$key],"cmp");
+			$response.=add_man($race_ids_unique[$key]);
 		}
 		
-		echo $response;		
+		echo $response;
 
 
 	}

@@ -20,7 +20,7 @@
 	<script>
 		function set_timer()
 		{
-			//window.setInterval(refresh_race,2000);
+			window.setInterval(refresh_race,2000);
 		}
 		function refresh_race()
                 {
@@ -49,8 +49,8 @@
                                                 if(xmlHttpReg.status==200)
                                                 {
 							console.log("hello");
-                                                        var tmp=document.getElementsByClassName("row-fluid");
-							tmp[0].innerHTML=xmlHttpReg.responseText;
+                                                        var tmp=document.getElementById("content");
+							tmp.innerHTML=xmlHttpReg.responseText;
                                                 }
                                         }
 				}
