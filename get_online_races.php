@@ -212,7 +212,7 @@
 		{
 			$response.=add_race($all_races[$key]);
 			usort($race_ids_unique[$key],"cmp");
-			$response.=add_man($race_ids_unique[$key]);
+			$response.=add_man($race_ids_unique[$key],$_GET['page']);
 		}
 		
 		echo $response;
