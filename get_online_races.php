@@ -186,7 +186,7 @@
 			$race_ids[]=$record['Race_id'];
 		}
 		$cnt=count($race_ids);
-		if(!$cnt) {echo "no races is going on!";exit(1);}
+		if(!$cnt) {echo "no races is going on!,please go to historical page";exit(1);}
 		sort($race_ids);
 		$race_ids_unique=array();
 		$race_ids_unique[$race_ids[0]]=array();
