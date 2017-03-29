@@ -221,11 +221,13 @@
 	}
 	if(!empty($_GET) && ($_GET['page']=='1'))
 	{
+		$race_id=$_GET['race_id'];
 		$response="";
                 $races=get_data_from("testcom","history");
                 $race_ids=array();
                 foreach($races as $record)
                 {
+			if($record['Race_id']!=$race_id) continue;
                         $race_ids[]=$record['Race_id'];
                 }
                 $cnt=count($race_ids);
@@ -260,6 +262,40 @@
                 echo $response;
 
 	}
+	if(!empty($_GET) && ($_GET['page']=='2'))
+	{
+		$Data=get_data_from("testcom","race");
+		$year=array();
+		foreach($Data as $record)
+		{
+			if($record['status']=='1') continue;
+			$year[substr($record['Race_start_Data'],0,4)]=array();
+		}
+		foreach($Data as $record)
+		{
+			if($record['status']=='1') continue;
+			$year[substr($record['Race_start_Data'],0,4)][]=array($record['Race'],$record['Race_id']);
+		}
+		$response="";
+		foreach($year as $y=>$race_name)
+		{
+			$response='<li class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">'.$y.'年度 <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu" id="menu1">';
+			foreach($race_name as $race)
+			{
+				$response.='
+                                    <li>
+                                        <a onclick="show_race(\''.$race[1].'\')">'.$race[0].'</a>
+                                    </li>';
+			}
+                        $response.='</ul></li>';
+		}
+		$response.='<li><a href="index.html">即时成绩榜单</a></li>';
+		echo $response;
 
 
+
+	}
 ?>

@@ -33,7 +33,40 @@
                                 }
                                 if(xmlHttpReg != null)
                                 {
-                                        xmlHttpReg.open("get", "get_online_races.php?page=1",true);
+                                        xmlHttpReg.open("get", "get_online_races.php?page=2",true);
+                                        xmlHttpReg.send(null);
+                                        xmlHttpReg.onreadystatechange = doResult;
+                                }
+			function doResult()
+                                {
+                                        if(xmlHttpReg.readyState==4)
+                                        {
+                                                if(xmlHttpReg.status==200)
+                                                {
+                                                        var tmp=document.getElementsByClassName("nav");
+                                                        tmp[0].innerHTML=xmlHttpReg.responseText;
+							//console.log(xmlHttpReg.responseText);
+                                                }
+                                        }
+                                }
+                }	
+
+		function show_race(race_id)
+                {
+                                
+                                var xmlHttpReg = null;
+                                if(window.ActiveXObject)
+                                {
+                                        xmlHttpReg = new ActiveXObject("Microsoft.XMLHTTP");
+
+                                }
+                                else if(window.XMLHttpRequest)
+                                {
+                                        xmlHttpReg = new XMLHttpRequest();
+                                }
+                                if(xmlHttpReg != null)
+                                {
+                                        xmlHttpReg.open("get", "get_online_races.php?page=1&race_id="+race_id,true);
                                         xmlHttpReg.send(null);
                                         xmlHttpReg.onreadystatechange = doResult;
                                 }
@@ -45,11 +78,11 @@
                                                 {
                                                         var tmp=document.getElementById("content");
                                                         tmp.innerHTML=xmlHttpReg.responseText;
+							//console.log(xmlHttpReg.responseText);
                                                 }
                                         }
                                 }
                 }	
-
 	</script>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
