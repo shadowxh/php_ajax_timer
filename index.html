@@ -37,7 +37,7 @@
                                 }
 				if(xmlHttpReg != null)
                                 {
-                                        xmlHttpReg.open("get", "get_online_races.php?race=1",true);
+                                        xmlHttpReg.open("get", "get_online_races.php?page=0",true);
                                         xmlHttpReg.send(null);
                                         xmlHttpReg.onreadystatechange = doResult;
                                 }
@@ -48,7 +48,7 @@
                                         {
                                                 if(xmlHttpReg.status==200)
                                                 {
-							console.log("hello");
+							//console.log("hello");
                                                         var tmp=document.getElementById("content");
 							tmp.innerHTML=xmlHttpReg.responseText;
                                                 }

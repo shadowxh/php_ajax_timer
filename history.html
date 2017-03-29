@@ -16,7 +16,41 @@
         <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     
-    <body>
+    <body onload="show_history()">
+	<script>
+		function show_history()
+                {
+                                
+                                var xmlHttpReg = null;
+                                if(window.ActiveXObject)
+                                {
+                                        xmlHttpReg = new ActiveXObject("Microsoft.XMLHTTP");
+
+                                }
+                                else if(window.XMLHttpRequest)
+                                {
+                                        xmlHttpReg = new XMLHttpRequest();
+                                }
+                                if(xmlHttpReg != null)
+                                {
+                                        xmlHttpReg.open("get", "get_online_races.php?page=1",true);
+                                        xmlHttpReg.send(null);
+                                        xmlHttpReg.onreadystatechange = doResult;
+                                }
+			function doResult()
+                                {
+                                        if(xmlHttpReg.readyState==4)
+                                        {
+                                                if(xmlHttpReg.status==200)
+                                                {
+                                                        var tmp=document.getElementById("content");
+                                                        tmp.innerHTML=xmlHttpReg.responseText;
+                                                }
+                                        }
+                                }
+                }	
+
+	</script>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
